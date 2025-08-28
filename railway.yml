@@ -1,0 +1,41 @@
+services:
+  - name: skynet-backend
+    type: web
+    build:
+      dockerfile: Dockerfile
+    envs:
+      - key: DB_PATH
+        value: /app/data/skynet_db.sqlite
+      - key: RAILWAY_API_TOKEN
+        value: YOUR_RAILWAY_API_TOKEN
+      - key: RAILWAY_PROJECT_ID
+        value: YOUR_PROJECT_ID
+      - key: REPO_URL
+        value: https://github.com/apujiono/SENTINEL-CORE.git
+    volumes:
+      - source: skynet-data
+        target: /app/data
+    startCommand: python src/main.py --min_terminators 10 --interval 120 --monitor_interval 360
+  - name: sentinel-core
+    type: web
+    build:
+      dockerfile: Dockerfile
+    envs:
+      - key: DB_PATH
+        value: /app/data/skynet_db.sqlite
+      - key: RAILWAY_API_TOKEN
+        value: YOUR_RAILWAY_API_TOKEN
+      - key: RAILWAY_PROJECT_ID
+        value: YOUR_PROJECT_ID
+      - key: REPO_URL
+        value: https://github.com/apujiono/SENTINEL-CORE.git
+    volumes:
+      - source: skynet-data
+        target: /app/data
+    startCommand: gunicorn src.app:app
+  - name: redis
+    type: database
+    image: redis:latest
+volumes:
+  - name: skynet-data
+    path: /app/data
