@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skynet Omega - Sentinel Core</title>
+    <link rel="stylesheet" href="/static/css/neon-ui.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="icon" href="/static/img/t800-eye.png">
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="neon-header">
+        <h1 class="heartbeat">Skynet Omega</h1>
+        <p>Sentinel Core Dashboard - Powered by Eagle Eye</p>
+        <button id="dark-mode-toggle" onclick="toggleDarkMode()">Dark Mode</button>
+    </div>
+    <div class="main-grid">
+        <div class="panel">
+            <h2>Threat Hunter</h2>
+            <input type="text" id="keyword" placeholder="Enter keyword (e.g., phishing)">
+            <button class="primary" onclick="scanThreat()">Quantum Scan</button>
+            <div id="threat-results"></div>
+        </div>
+        <div class="panel">
+            <h2>Global Threat Globe</h2>
+            <div id="map"></div>
+        </div>
+        <div class="panel">
+            <h2>Terminator Network</h2>
+            <select id="agent-select"></select>
+            <button onclick="sendCommand('ping')">Ping</button>
+            <button onclick="sendCommand('restart')">Restart</button>
+            <button class="danger" onclick="sendCommand('self-destruct')">Self-Destruct</button>
+            <button class="primary" onclick="replicateAgent()">Spawn T-800</button>
+            <div id="agent-details"></div>
+            <div id="agent-list"></div>
+            <div id="agent-hierarchy"></div>
+        </div>
+        <div class="panel">
+            <h2>Intelligence Hub</h2>
+            <div id="intel-feed">
+                {% for alert in alerts %}
+                    <p>{{ alert.time }}: {{ alert.data.message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="panel">
+            <h2>CyberWar Engine</h2>
+            <input type="text" id="retaliate-ip" placeholder="Target IP/Domain">
+            <button onclick="retaliate('simulate')">Simulate</button>
+            <button class="danger" onclick="retaliate('cyberwar')">Engage</button>
+            <div id="war-log"></div>
+        </div>
+        <div class="panel">
+            <h2>Analytics</h2>
+            <canvas id="analytics-chart"></canvas>
+        </div>
+        <div class="panel">
+            <h2>Dead Man’s Switch</h2>
+            <button class="danger" onclick="activateSwitch()">Activate</button>
+            <p>Status: {{ "Active" if deadman_active else "Inactive" }}</p>
+        </div>
+        <div class="panel">
+            <h2>Autopilot Status</h2>
+            <p>Status: Running</p>
+            <button onclick="sendCommand('pause_autopilot')">Pause Autopilot</button>
+            <button class="primary" onclick="sendCommand('resume_autopilot')">Resume Autopilot</button>
+        </div>
+    </div>
+    <div class="modal" id="switch-modal">
+        <div class="modal-content">
+            <h2>Dead Man’s Switch</h2>
+            <p>Activate to leak intel if Skynet goes offline.</p>
+            <button class="danger" onclick="confirmSwitch()">Confirm</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+    <div class="quantum-particles" id="particles"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.104/Build/Cesium/Cesium.js"></script>
+    <script src="/static/js/particles.js"></script>
+    <script src="/static/js/commander.js"></script>
+</body>
+</html>
