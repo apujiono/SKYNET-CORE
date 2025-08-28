@@ -1,0 +1,14 @@
+python-whois
+requests
+beautifulsoup4
+dnspython
+python-telegram-bot
+flask
+gunicorn
+redis
+geoip2
+torch
+transformers
+schedule
+numpy
+joblib
