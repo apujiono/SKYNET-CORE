@@ -1,0 +1,5 @@
+from sklearn.linear_model import LogisticRegression
+import joblib
+model = LogisticRegression()
+model.fit([[0], [1]], [0, 1])  # Dummy training
+joblib.dump(model, "src/data/model.pkl")
