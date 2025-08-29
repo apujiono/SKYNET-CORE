@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger("Skynet")
 
 def scan_terminator(domain, config):
-    redis_client = redis.Redis(host="redis", port=6379, decode_responses=True)
+    redis_client = redis.Redis(host="redis", port=6379, decode_responses=True, retry_on_timeout=True)
     cache_key = f"vt:{domain}"
     if redis_client.exists(cache_key):
         return json.loads(redis_client.get(cache_key))
@@ -27,12 +27,12 @@ def scan_terminator(domain, config):
                 logger.info(f"Scanned {domain}: {result['is_terminator']}")
                 return result
             elif response.status_code == 429:
-                logger.warning("VirusTotal rate limit hit, retrying...")
+                logger.warning("VirusTotal rate limit hit, retrying in %s seconds...", 2 ** attempt)
                 time.sleep(2 ** attempt)
             else:
-                logger.error(f"VirusTotal error {response.status_code}")
+                logger.error("VirusTotal error %s for %s", response.status_code, domain)
                 break
         except Exception as e:
-            logger.error(f"Scan error for {domain}: {e}")
+            logger.error("Scan error for %s: %s", domain, e)
             time.sleep(2 ** attempt)
     return result
