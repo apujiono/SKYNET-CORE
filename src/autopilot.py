@@ -29,7 +29,7 @@ class Autopilot:
             results.append(result)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         save_to_db(results, self.config["db_path"], timestamp)
-        threats = [r for r in results if r["is_terminator"] or r["score"] > 80]
+        threats = [r for r in results if r["is_terminator"] or r['score'] > 80]
         if threats:
             send_whatsapp_notification(threats, self.config, timestamp)
         logger.info(f"✅ [AUTOPILOT] Scan complete: {len(threats)} threats found.")
