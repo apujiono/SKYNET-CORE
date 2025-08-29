@@ -1,7 +1,6 @@
 import logging
 from src.database import save_agent
 from datetime import datetime
-import random
 
 logger = logging.getLogger("Skynet")
 
