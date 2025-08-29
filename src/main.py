@@ -1,56 +1,37 @@
-import argparse
-from src.scanner import print_t800_logo
-from src.database import init_quarantine_zone
-from src.autopilot import Autopilot
 import logging
-from logging.handlers import RotatingFileHandler
+from src.autopilot import Autopilot
+from src.database import save_agent
+from datetime import datetime
+import os
 
-def setup_logging():
-    logger = logging.getLogger("Skynet")
-    logger.setLevel(logging.INFO)
-    handler = RotatingFileHandler("logs/skynet.log", maxBytes=2*1024*1024, backupCount=3)
-    formatter = logging.Formatter('%(asctime)s - T-800: %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+logging.basicConfig(level=logging.INFO, filename="/app/data/skynet.log", maxBytes=1000000, backupCount=1)
+logger = logging.getLogger("Skynet")
 
-def main():
-    parser = argparse.ArgumentParser(description="Skynet 1000x - Cyber Security Framework")
-    parser.add_argument("--min_terminators", type=int, default=10, help="Minimum T-800 agents")
-    parser.add_argument("--interval", type=int, default=120, help="Scan interval in minutes")
-    parser.add_argument("--monitor_interval", type=int, default=360, help="Monitor interval in minutes")
-    args = parser.parse_args()
-
-    config = {
-        "scrape_url": "https://www.expireddomains.net/expired-domains/",
-        "vt_api_key": "YOUR_VIRUSTOTAL_API_KEY",
-        "maxmind_key": "YOUR_MAXMIND_KEY",
-        "whois_api_key": "YOUR_WHOIS_API_KEY",
-        "bert_model_path": "/app/data/bert_model",
-        "resource_model_path": "/app/data/resource_model.pkl",
-        "user_agents": ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"],
-        "proxies": {},
-        "db_path": "/app/data/skynet_db.sqlite",
-        "smtp_server": "smtp.gmail.com",
-        "smtp_port": 587,
-        "email_from": "your_email@gmail.com",
-        "email_to": "recipient_email@gmail.com",
-        "email_password": "your_app_specific_password",
-        "telegram_bot_token": "YOUR_TELEGRAM_BOT_TOKEN",
-        "telegram_chat_id": "YOUR_TELEGRAM_CHAT_ID",
-        "discord_webhook": "YOUR_DISCORD_WEBHOOK",
-        "slack_webhook": "YOUR_SLACK_WEBHOOK",
-        "railway_api_token": "YOUR_RAILWAY_API_TOKEN",
-        "railway_project_id": "YOUR_PROJECT_ID",
-        "repo_url": "https://github.com/apujiono/SENTINEL-CORE.git",
-        "dash_key": "skynet123",
-        "hive_url": "https://your-skynet.up.railway.app"
-    }
-
-    setup_logging()
-    print_t800_logo()
-    init_quarantine_zone(config["db_path"])
+def main(config):
+    logger.info("🚀 Skynet Omega initializing...")
+    save_agent({
+        "id": "T800-root",
+        "parent_id": None,
+        "last_seen": datetime.now().isoformat(),
+        "status": "active",
+        "priority": "root"
+    }, config["db_path"])
+    config["min_terminators"] = 2
     autopilot = Autopilot(config)
     autopilot.run()
 
 if __name__ == "__main__":
-    main()
+    config = {
+        "db_path": os.getenv("DB_PATH", "/app/data/skynet_db.sqlite"),
+        "model_path": os.getenv("MODEL_PATH", "/app/src/data/model.pkl"),
+        "geolite_path": os.getenv("GEOLITE_PATH", "/app/data/GeoLite2-City.mmdb"),
+        "virustotal_api_key": os.getenv("VIRUSTOTAL_API_KEY"),
+        "twilio_account_sid": os.getenv("TWILIO_ACCOUNT_SID"),
+        "twilio_auth_token": os.getenv("TWILIO_AUTH_TOKEN"),
+        "twilio_whatsapp_number": os.getenv("TWILIO_WHATSAPP_NUMBER", "whatsapp:+14155238886"),
+        "whatsapp_number": os.getenv("WHATSAPP_NUMBER", "whatsapp:+6281234567890"),
+        "min_terminators": 2,
+        "scan_interval": 3600,
+        "monitor_interval": 3600
+    }
+    main(config)
