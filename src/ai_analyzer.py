@@ -2,6 +2,7 @@ from sklearn.linear_model import LogisticRegression
 import joblib
 import hashlib
 import logging
+import os
 
 logger = logging.getLogger("Skynet")
 
