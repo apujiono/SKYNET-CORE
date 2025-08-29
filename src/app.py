@@ -25,6 +25,7 @@ config = {
 logger.info("Initializing Skynet with config: %s", {k: v if 'key' not in k.lower() and 'token' not in k.lower() else '***' for k, v in config.items()})
 
 try:
+    logger.info("Attempting to initialize ThreatAnalyzer")
     analyzer = ThreatAnalyzer(config)
     logger.info("ThreatAnalyzer initialized successfully")
 except Exception as e:
