@@ -24,7 +24,6 @@ if __name__ == "__main__":
     config = {
         "db_path": os.getenv("DB_PATH", "/app/data/skynet_db.sqlite"),
         "model_path": os.getenv("MODEL_PATH", "/app/src/data/model.pkl"),
-        "geolite_path": os.getenv("GEOLITE_PATH", "/app/data/GeoLite2-City.mmdb"),
         "virustotal_api_key": os.getenv("VIRUSTOTAL_API_KEY"),
         "twilio_account_sid": os.getenv("TWILIO_ACCOUNT_SID"),
         "twilio_auth_token": os.getenv("TWILIO_AUTH_TOKEN"),
