@@ -6,8 +6,6 @@ services:
     envs:
       - key: DB_PATH
         value: /app/data/skynet_db.sqlite
-      - key: GEOLITE_PATH
-        value: /app/data/GeoLite2-City.mmdb
       - key: MODEL_PATH
         value: /app/src/data/model.pkl
       - key: VIRUSTOTAL_API_KEY
@@ -23,7 +21,7 @@ services:
     volumes:
       - source: skynet-data
         target: /app/data
-    startCommand: gunicorn -w 1 -b 0.0.0.0:8080 src.app:app
+    startCommand: gunicorn -w 1 -b 0.0.0.0:8080 --timeout 120 src.app:app
   - name: redis
     type: database
     image: redis:latest
