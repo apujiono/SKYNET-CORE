@@ -6,33 +6,24 @@ services:
     envs:
       - key: DB_PATH
         value: /app/data/skynet_db.sqlite
-      - key: RAILWAY_API_TOKEN
-        value: YOUR_RAILWAY_API_TOKEN
-      - key: RAILWAY_PROJECT_ID
-        value: YOUR_PROJECT_ID
-      - key: REPO_URL
-        value: https://github.com/apujiono/SENTINEL-CORE.git
+      - key: GEOLITE_PATH
+        value: /app/data/GeoLite2-City.mmdb
+      - key: MODEL_PATH
+        value: /app/src/data/model.pkl
+      - key: VIRUSTOTAL_API_KEY
+        value: YOUR_VIRUSTOTAL_KEY
+      - key: TWILIO_ACCOUNT_SID
+        value: YOUR_TWILIO_SID
+      - key: TWILIO_AUTH_TOKEN
+        value: YOUR_TWILIO_AUTH_TOKEN
+      - key: TWILIO_WHATSAPP_NUMBER
+        value: whatsapp:+14155238886
+      - key: WHATSAPP_NUMBER
+        value: whatsapp:+6281234567890
     volumes:
       - source: skynet-data
         target: /app/data
-    startCommand: python src/main.py --min_terminators 10 --interval 120 --monitor_interval 360
-  - name: sentinel-core
-    type: web
-    build:
-      dockerfile: Dockerfile
-    envs:
-      - key: DB_PATH
-        value: /app/data/skynet_db.sqlite
-      - key: RAILWAY_API_TOKEN
-        value: YOUR_RAILWAY_API_TOKEN
-      - key: RAILWAY_PROJECT_ID
-        value: YOUR_PROJECT_ID
-      - key: REPO_URL
-        value: https://github.com/apujiono/SENTINEL-CORE.git
-    volumes:
-      - source: skynet-data
-        target: /app/data
-    startCommand: gunicorn src.app:app
+    startCommand: gunicorn -w 1 -b 0.0.0.0:8080 src.app:app
   - name: redis
     type: database
     image: redis:latest
